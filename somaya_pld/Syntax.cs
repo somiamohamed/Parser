@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using com.calitha.goldparser.lalr;
 using com.calitha.commons;
-using System.Windows.Forms;
 
 namespace com.calitha.goldparser
 {
@@ -142,18 +141,13 @@ namespace com.calitha.goldparser
     public class MyParser
     {
         private LALRParser parser;
-        ListBox lstbx_1st;
-        ListBox lstbx_2nd;
 
-        public MyParser(string filename, ListBox lstbx_1st, ListBox lstbx_2nd)
+        public MyParser(string filename)
         {
             FileStream stream = new FileStream(filename,
                                                FileMode.Open, 
                                                FileAccess.Read, 
                                                FileShare.Read);
-            this.lstbx_1st = lstbx_1st;
-            this.lstbx_2nd = lstbx_2nd;
-
             Init(stream);
             stream.Close();
         }
@@ -176,13 +170,13 @@ namespace com.calitha.goldparser
 
         private void Init(Stream stream)
         {
-            parser = new CGTReader(stream).CreateNewParser();
+            CGTReader reader = new CGTReader(stream);
+            parser = reader.CreateNewParser();
             parser.TrimReductions = false;
             parser.StoreTokens = LALRParser.StoreTokensMode.NoUserObject;
 
             parser.OnTokenError += new LALRParser.TokenErrorHandler(TokenErrorEvent);
             parser.OnParseError += new LALRParser.ParseErrorHandler(ParseErrorEvent);
-            parser.OnTokenRead += new LALRParser.TokenReadHandler(TokenReadEvent);
         }
 
         public void Parse(string source)
@@ -642,17 +636,9 @@ namespace com.calitha.goldparser
 
         private void ParseErrorEvent(LALRParser parser, ParseErrorEventArgs args)
         {
-            string message = "Parse error caused by token: '"+args.UnexpectedToken.ToString()+" In line: "+ args.UnexpectedToken.Location.LineNr;
-            lstbx_1st.Items.Add(message);
-            string afterToken_message = "Expected Token: " + args.ExpectedTokens.ToString();
-            lstbx_1st.Items.Add(afterToken_message);
+            string message = "Parse error caused by token: '"+args.UnexpectedToken.ToString()+"'";
             //todo: Report message to UI?
         }
 
-        private void TokenReadEvent(LALRParser parser, TokenReadEventArgs args)
-        {
-            string info = args.Token.Text + " ---> " + (SymbolConstants)args.Token.Symbol.Id;
-            lstbx_2nd.Items.Add(info);
-        }
     }
 }

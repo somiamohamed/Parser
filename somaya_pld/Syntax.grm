@@ -1,0 +1,77 @@
+"Author"   = 'Somaya Mohamed'
+
+"Start Symbol" = <Program>
+
+! -------------------------------------------------
+! Character Sets
+! -------------------------------------------------
+
+{ID Head}      = {Letter} + [_]
+{ID Tail}      = {Alphanumeric} + [_]
+{String Chars} = {Printable} + {HT} - ["\]
+
+! -------------------------------------------------
+! Terminals
+! -------------------------------------------------
+
+Identifier    = {ID Head}{ID Tail}*
+StringLiteral = '"' ( {String Chars} | '\' {Printable} )* '"'
+Integer       = {digit}+
+
+! -------------------------------------------------
+! Rules
+! -------------------------------------------------
+
+<Program> ::= <StatementList>
+
+<StatementList> ::= 
+               | <StatementList> <Statement>
+               | <Statement>
+
+<Statement> ::= <VariableDeclaration> | <Assignment> 
+             | <IfStatement> | <ForLoop> 
+
+<VariableDeclaration> ::= <Type> Identifier '=' <Expression> ';'
+
+<Type> ::= 'int' | 'string' | 'bool'
+
+<Assignment> ::= Identifier '=' <Expression> ';'
+
+<IfStatement> ::= 'if' '(' <Expression> ')' '{' <StatementList> '}'
+               |'if' '(' <Expression> ')' '{' <StatementList> '}' 'else' '{' <StatementList> '}'
+
+!---------------------------------------------------------------------------
+
+<ForLoop> ::= 'for' '(' <Initialization> ';' <Expression> ';' <IncDec> ')' '{' <StatementList> '}'
+
+<Initialization>::= <Type> Identifier '=' <Expression>
+
+<IncDec>::= Identifier '++'
+         | Identifier '--'
+ 
+!---------------------------------------------------------------------------
+
+<Expression>  ::= <Expression> '>'  <Add Exp> 
+               |  <Expression> '<'  <Add Exp> 
+               |  <Expression> '<=' <Add Exp> 
+               |  <Expression> '>=' <Add Exp>
+               |  <Expression> '==' <Add Exp>   
+               |  <Expression> '<>' <Add Exp>    
+               |  <Add Exp> 
+
+<Add Exp>     ::= <Add Exp> '+' <Mult Exp>
+               |  <Add Exp> '-' <Mult Exp>
+               |  <Mult Exp> 
+
+<Mult Exp>    ::= <Mult Exp> '*' <Negate Exp> 
+               |  <Mult Exp> '/' <Negate Exp> 
+               |  <Negate Exp> 
+
+<Negate Exp>  ::= '-' <Value> 
+               |  <Value> 
+
+
+<Value>       ::= Identifier
+               |Integer
+               |StringLiteral
+               |  '(' <Expression> ')'
