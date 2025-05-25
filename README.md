@@ -4,7 +4,7 @@
   
   <h2>Characteristics</h2>
   <p>Case Sensitive: Yes</p>
-  <p>Start Symbol: '<Program>'</p>
+  <p>Start Symbol: Program</p>
 
   <h2>Features</h2>
   <p>Variables and Types</p>
