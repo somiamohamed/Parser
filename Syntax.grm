@@ -1,0 +1,85 @@
+"Author"   = 'Somaya Mohamed'
+"Case Sensitive" = True
+"Start Symbol" = <Program>
+
+
+! -------------------------------------------------
+! Character Sets
+! -------------------------------------------------
+
+{ID Head}      = {Letter}
+{ID Tail}      = {Alphanumeric}
+{String Chars} = {Printable}
+
+! -------------------------------------------------
+! Terminals
+! -------------------------------------------------
+
+Identifier    = {ID Head}{ID Tail}*
+StringLiteral =  '"' {String Chars}* '"'
+Integer       = {digit}+
+Boolean       = 'yes' | 'no'
+
+!---------------------------------------------------------------------------
+
+<Program> ::= <StatementList>
+
+<StatementList> ::= <Statement>
+               | <StatementList> <Statement>
+
+<Statement> ::= <Declaration> | <Assignment> 
+             | <Condition> | <Loop>
+             | <Output>
+             
+!---------------------------------------------------------------------------
+
+<Declaration> ::= 'let' Identifier 'be' <Type> 'as' <Expression> ';'
+               | 'let' Identifier 'be' <Type> ';'
+
+<Type> ::= 'number' | 'text' | 'flag'
+
+<Assignment> ::= Identifier '<~' <Expression> ';'
+              
+!---------------------------------------------------------------------------
+
+<Condition> ::= 'when' <Expression> 'then' '{' <StatementList> '}'
+             | 'when' <Expression> 'then' '{' <StatementList> '}' 'otherwise' '{' <StatementList> '}'
+
+!---------------------------------------------------------------------------
+
+<Loop> ::= 'cycle' Identifier 'from' <Expression> 'to' <Expression> '{' <StatementList> '}'
+        | 'repeat' 'until' <Expression> '{' <StatementList> '}'
+ 
+!---------------------------------------------------------------------------
+
+<Expression>  ::= <LogicalExp>
+<LogicalExp>  ::= <CompareExp> <LogicalExpTail>
+<LogicalExpTail> ::= 'and' <CompareExp> <LogicalExpTail>
+                  | 'or' <CompareExp> <LogicalExpTail>
+
+
+<CompareExp>  ::= <AddExp> 'is' <Relation> <AddExp>
+               |  <AddExp>
+<Relation>    ::= 'greater' | 'less' | 'same' | 'not_same'
+
+
+<AddExp>      ::= <AddExp> 'plus' <MultExp>   
+               |  <AddExp> 'minus' <MultExp>   
+               |  <MultExp>
+
+<MultExp>     ::= <MultExp> 'times' <NegateExp> 
+               |  <MultExp> 'over' <NegateExp>  
+               |  <NegateExp>
+
+<NegateExp>   ::= 'negative' <Value>  
+               |  <Value>
+
+<Value>       ::= Identifier 
+               | Integer   
+               | StringLiteral  
+               | Boolean  
+               | '(' <Expression> ')'
+
+!---------------------------------------------------------------------------
+
+<Output> ::= 'show' <Expression> ';'
