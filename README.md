@@ -1,11 +1,10 @@
 <html>
   <h1>Introduction</h1>
-  <p>My simple, educational programming language designed with readability in mind. It features English-like syntax that makes it approachable for beginners while maintaining the core concepts of programming languages.</p>
+  <p>My simple, educational programming language is designed with readability in mind. It features English-like syntax that makes it approachable for beginners while maintaining the core concepts of programming languages.</p>
   
   <h2>Characteristics</h2>
   <p>Case Sensitive: Yes</p>
-  <p>Start Symbol: <Program></p>
-  <p>Author: Somaya Mohamed</p>
+  <p>Start Symbol: '<Program>'</p>
 
   <h2>Features</h2>
   <p>Variables and Types</p>
